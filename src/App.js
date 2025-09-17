@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Добавили BrowserRouter
+import Enter from "./pages/Enter";
+import Courses from "./pages/Courses";
+import Topics from "./pages/Topics";
+import Cards from "./pages/Cards";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <BrowserRouter>
+        <div>
+          <Routes>
+            <Route path="/" element={<Enter />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/topics" element={<Topics />} />
+              <Route path="/cards" element={<Cards />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+);
 }
 
 export default App;
