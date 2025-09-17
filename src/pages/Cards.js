@@ -7,36 +7,37 @@ import {c} from "react/compiler-runtime";
 
 function Cards()
 {
-    const [card, selectCard] = useState(<Redactor></Redactor>)
+    const [cardId, selectCardId] = useState(null)
     return (<div>
 
             <div className="row ">
 
                 <div className="col-2">
-                    <CardList selectCard={selectCard}></CardList>
+                    <CardList selectCardId={selectCardId}></CardList>
                 </div>
                 <div className="col-10">
-                    <Select card={card}></Select>
+                    <Select cardId={cardId}></Select>
                 </div>
             </div>
         </div>
    );
 }
 
-function Select({card})
+function Select({cardId})
 {
-    const [content, setContent]=useState(<Redactor card={card}/>);
+    console.log(cardId);
+    const [content, setContent]=useState(null);
 
     useEffect(() => {
-        if (card) {
-            setContent(<Redactor card={card} />);
+        if (cardId) {
+            setContent(<Redactor cardId={cardId} />);
         }
-    }, [card]);
+    }, [cardId]);
 
     function selectContent(form)
     {
         if (form=='redactor')
-            setContent(<Redactor card={card} />);
+            setContent(<Redactor card={cardId} />);
         if (form=='addCard')
             setContent(<h1>addCard</h1>);
     }
@@ -63,7 +64,7 @@ function Select({card})
         </div>
     )
 }
-function CardList({selectCard}) {
+function CardList({selectCardId}) {
     const location = useLocation();
     const {topicId} = location.state || {};
 
@@ -82,12 +83,12 @@ function CardList({selectCard}) {
 
     return(
         <div className="list-group ">
-            <button type="button" id={data.id}  className="list-group-item list-group-item-action active" aria-current="true">
+            <button  type="button" id={data.id}  className="list-group-item list-group-item-action active" aria-current="true">
                 {data.name}
             </button>
             {data.cards.map(item => (
-                <div>
-                    <button onClick={()=>selectCard(item.name)} type="button"  className="list-group-item list-group-item-action">{item.name}</button>
+                <div key={item.id}>
+                    <button  onClick={()=>selectCardId(item.id)} type="button"  className="list-group-item list-group-item-action">{item.name}</button>
 
                 </div>
             ))}

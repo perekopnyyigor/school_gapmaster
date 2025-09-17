@@ -15,8 +15,7 @@ function Topics({ id })
             .then(response => setData(response.data))
             .catch(error => console.error(error));
     } );
-    //let chapter = Chapter(props.id)
-    console.log(data);
+
 
     function toTopics(id)
     {
