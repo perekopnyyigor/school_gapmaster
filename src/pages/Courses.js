@@ -29,6 +29,7 @@ function Courses()
     return(
 
         <div className="list-group col-2">
+
             <button type="button" className="list-group-item list-group-item-action active" aria-current="true">
                 Список курсов
             </button>
