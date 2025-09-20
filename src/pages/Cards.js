@@ -3,6 +3,7 @@ import {data, useLocation} from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Redactor from "./Redactor";
+import CardsRedactor from "./CardsRedactor";
 import {c} from "react/compiler-runtime";
 
 function Cards()
@@ -71,7 +72,7 @@ function Select({cardId})
         if (form=='redactor')
             setContent(<Redactor card={cardId} />);
         if (form=='addCard')
-            setContent(<h1>addCard</h1>);
+            setContent(<CardsRedactor/>);
     }
 
 
@@ -86,13 +87,13 @@ function Select({cardId})
                        href="#">Active</a>
                 </li>
                 <li className="nav-item">
-                    <a onClick={() => selectContent('addCard')} className="nav-link" href="#">Link</a>
+                    <button onClick={() => selectContent('addCard')} className="nav-link">Link</button>
                 </li>
                 <li className="nav-item">
-                    <a onClick={() => selectContent('addCardList')} className="nav-link" href="#">Link</a>
+                    <button onClick={() => selectContent('addCardList')} className="nav-link" >Link</button>
                 </li>
                 <li className="nav-item">
-                    <a className="nav-link disabled" aria-disabled="true">Disabled</a>
+                    <button className="nav-link disabled" aria-disabled="true">Disabled</button>
                 </li>
             </ul>
 
