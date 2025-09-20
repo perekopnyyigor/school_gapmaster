@@ -11,6 +11,7 @@ function Redactor({cardId})
 {
     console.log(cardId);
     const [content, setContent] = useState("");
+    const [name, setName] = useState("");
     const [cardData, setCardData] = useState({});
     useEffect(() => {
         const post_data = { card_id: cardId };
@@ -22,7 +23,7 @@ function Redactor({cardId})
             .then((response) => {
                 setCardData(response.data);
                 setContent(response.data.content_mark); // Устанавливаем начальное значение контента
-
+                setName(response.data.name);
             })
             .catch((error) => console.error(error));
     }, [cardId]); // Следим за изменением cardId
@@ -33,12 +34,10 @@ function Redactor({cardId})
 
             <div className="row">
                 <div className="col-xxl-6">
-
-                    <Text setContent={setContent} content={content} data={cardData}></Text>
-
+                    <Text content={content} setContent={setContent}  name={name} setName={setName} data={cardData}></Text>
                 </div>
                 <div className="col-xxl-6">
-                    <ShowResult content={content}></ShowResult>
+                    <ShowResult content={content} name={name}></ShowResult>
                 </div>
             </div>
         </div>
@@ -67,13 +66,17 @@ function SendImg(card_id, img, setContent, content) {
         });
     ;
 }
-function Text({content,setContent, data})
+function Text({content,setContent, name, setName, data})
 {
     const [file, setFile] = useState(null);
     function save()
     {
-        Send( data, content);
+        Send( data, content, name);
 
+    }
+    function delCard()
+    {
+        deleteCard(data.id)
     }
     function uploadFile(event) {
         const selectedFile = event.target.files[0]; // Получаем выбранный файл
@@ -83,21 +86,44 @@ function Text({content,setContent, data})
         }
 
         setFile(selectedFile); // Обновляем состояние для дальнейшего использования, если нужно
-        //alert(selectedFile.name); // Показываем имя файла
+
 
         SendImg(data.id, selectedFile, setContent, content); // Передаём файл напрямую
     }
-    return (<div><textarea
-            id="text"
-            onChange={(e)=>setContent(e.target.value)}
-            style={{height: "85vh"}}
-            value={content} // Привязываем значение из состояния content
-            className="form-control border-success"
-        />
-            <button onClick={()=>save()} type="button" className="btn btn-primary p-2 m-2">Сохранить</button>
+    return (<div>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="form-control my-2"/>
+
+            <textarea
+                id="text"
+                onChange={(e) => setContent(e.target.value)}
+                style={{height: "80vh"}}
+                value={content} // Привязываем значение из состояния content
+                className="form-control border-success"
+            />
+            <button onClick={() => save()} type="button" className="btn btn-primary p-2 m-2">Сохранить</button>
+            <button onClick={() => delCard()} type="button" className="btn btn-danger p-2 m-2">Удалить</button>
             <input type="file" name="file_variant" onChange={uploadFile}/></div>
 
     );
+}
+function deleteCard(id)
+{
+    const post_data = {
+        card_id:id
+    };
+
+    let del = window.confirm("Вы действительно хотите удалить карту");
+    if (del) {
+        axios
+            .post("/index_redactor.php?action=delete_card", post_data, {
+                headers: {"Content-Type": "application/json"},
+            })
+            .then((response) => {
+
+            })
+            .catch((error) => console.error(error));
+        alert("Удалено");
+    }
 }
 
 function withoutAnswer(content) {
@@ -134,11 +160,13 @@ function getVariant(content)
     return newContent;
 
 }
-function ShowResult({content}) {
+function ShowResult({content, name}) {
     let contentWithoutAnswer=withoutAnswer(content)
     let variants = getVariant(content);
-    return (<div
-        style={{height: "85vh"}}
+    return (<div>
+        <h1>{name}</h1>
+        <div
+        style={{height: "80vh"}}
         className="overflow-auto shadow p-3 mb-5 bg-body-tertiary rounded"
     >
         <ReactMarkdown
@@ -158,15 +186,16 @@ function ShowResult({content}) {
         >
             {variants}
         </ReactMarkdown>
-    </div>);
+    </div>
+        </div>);
 }
-function Send(card,content)
+function Send(card,content,name)
 {
 
 
     const post_data = {
         id:card.id,
-        card_name:card.name,
+        card_name:name,
         markdown_mark:content,
         task:"",
         type:1,

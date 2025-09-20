@@ -8,15 +8,23 @@ import {c} from "react/compiler-runtime";
 function Cards()
 {
     const [cardId, selectCardId] = useState(null)
+
     const location = useLocation();
     const {topicId} = location.state || {};
+
+    function create(topicId)
+    {
+
+        createCard(topicId);
+
+    }
     return (<div>
 
         <div className="row ">
 
             <div className="col-2">
-                <CardList topicId={topicId} selectCardId={selectCardId}></CardList>
-                <button onClick={()=>createCard(topicId)} type="button" className="btn btn-primary p-2 m-2">Добавить</button>
+                <CardList topicId={topicId}  selectCardId={selectCardId}></CardList>
+                <button onClick={()=>create(topicId)} type="button" className="btn btn-primary p-2 m-2">Добавить</button>
             </div>
             <div className="col-10">
                 <Select cardId={cardId}></Select>
@@ -30,7 +38,7 @@ function createCard(topic_id)
 
     const post_data = {
         topic_id:topic_id,
-        card_name:"name",
+        card_name:"new card",
         card_mark:"content",
         type:1,
         visible:2,
@@ -92,7 +100,7 @@ function Select({cardId})
         </div>
     )
 }
-function CardList({selectCardId,topicId}) {
+function CardList({selectCardId,topicId,cardListTrig}) {
 
 
 
@@ -104,7 +112,7 @@ function CardList({selectCardId,topicId}) {
         axios.post('/index_redactor.php?action=get_topic', post_data, {headers: {'Content-Type': 'application/json'}})
             .then(response => setData(response.data))
             .catch(error => console.error(error));
-    }, []);
+    }, [post_data]);
 
 
 
@@ -117,7 +125,6 @@ function CardList({selectCardId,topicId}) {
             {data.cards.map(item => (
                 <div key={item.id}>
                     <button  onClick={()=>selectCardId(item.id)} type="button"  className="list-group-item list-group-item-action">{item.name}</button>
-
                 </div>
             ))}
 
