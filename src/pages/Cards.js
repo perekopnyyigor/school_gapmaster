@@ -8,10 +8,11 @@ import {c} from "react/compiler-runtime";
 
 function Cards()
 {
+
     const [cardId, selectCardId] = useState(null)
 
     const location = useLocation();
-    const {topicId} = location.state || {};
+    const {topic} = location.state || {};
 
     function create(topicId)
     {
@@ -24,11 +25,11 @@ function Cards()
         <div className="row ">
 
             <div className="col-2">
-                <CardList topicId={topicId}  selectCardId={selectCardId}></CardList>
-                <button onClick={()=>create(topicId)} type="button" className="btn btn-primary p-2 m-2">Добавить</button>
+                <CardList topicId={topic.id}  selectCardId={selectCardId}></CardList>
+                <button onClick={()=>create(topic.id)} type="button" className="btn btn-primary p-2 m-2">Добавить</button>
             </div>
             <div className="col-10">
-                <Select cardId={cardId}></Select>
+                <Select cardId={cardId} topicId={topic.id} ></Select>
             </div>
             </div>
         </div>
@@ -56,9 +57,9 @@ function createCard(topic_id)
         .catch((error) => console.error(error));
 
 }
-function Select({cardId})
+function Select({cardId,topic_id})
 {
-    console.log(cardId);
+
     const [content, setContent]=useState(null);
 
     useEffect(() => {
@@ -72,7 +73,7 @@ function Select({cardId})
         if (form=='redactor')
             setContent(<Redactor card={cardId} />);
         if (form=='addCard')
-            setContent(<CardsRedactor/>);
+            setContent(<CardsRedactor topicId={topic_id}/>);
     }
 
 
@@ -83,8 +84,8 @@ function Select({cardId})
 
                 <li className="nav-item">
 
-                    <a onClick={() => selectContent('redactor')} className="nav-link active" aria-current="page"
-                       href="#">Active</a>
+                    <button onClick={() => selectContent('redactor')} className="nav-link active" aria-current="page"
+                       >Active</button>
                 </li>
                 <li className="nav-item">
                     <button onClick={() => selectContent('addCard')} className="nav-link">Link</button>

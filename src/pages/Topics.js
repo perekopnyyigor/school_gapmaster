@@ -17,12 +17,15 @@ function Topics({ id })
     } );
 
 
-    function toTopics(id)
+    function toTopics(topic)
     {
 
         navigate('/cards', {
             state: {
-                topicId: id
+                topic: { // Передаем весь объект topic
+                    id: topic.id,
+                    count_cards: topic.count_cards
+                }
             }
         });
 
@@ -42,7 +45,7 @@ function Topics({ id })
                     {item.topics.map(item => (
                         <div>
 
-                            <button type="button" onClick={() => toTopics(item.id)}
+                            <button type="button" onClick={() => toTopics(item)}
                                     className="list-group-item list-group-item-action">
                                 <Strong chapter={item}></Strong>
                                 <Progress count={item.count_cards}></Progress>

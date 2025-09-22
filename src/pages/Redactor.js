@@ -9,7 +9,7 @@ import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css'; // Импорт стиля
 function Redactor({cardId})
 {
-    console.log(cardId);
+
     const [content, setContent] = useState("");
     const [name, setName] = useState("");
     const [cardData, setCardData] = useState({});
