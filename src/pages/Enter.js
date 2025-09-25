@@ -26,7 +26,7 @@ function EnterForm() {
     const navigate = useNavigate();
     function enter()
     {
-        navigate('/courses')
+        navigate('/school')
     }
 
     return (
