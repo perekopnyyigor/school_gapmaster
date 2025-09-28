@@ -9,7 +9,7 @@ import {useLocation} from "react-router-dom";
 import {c} from "react/compiler-runtime";
 import Markdown from "../components/Markdown";
 import TextArea from "../components/TextArea";
-
+import AskDeepSeek from "../components/AskDeepSeek";
 function TopicRedactor()
 {
     const location = useLocation();
@@ -17,6 +17,7 @@ function TopicRedactor()
 
     const [content, setContent] = useState("");
     const [prompt, setPrompt] = useState("");
+
     return (
         <div className="container-fluid">
 
@@ -25,8 +26,8 @@ function TopicRedactor()
                     <Text content={content} setContent={setContent}></Text>
                     <Prompt prompt={prompt} setPrompt={setPrompt}></Prompt>
                     <SaveCards content={content} topicId={topic.id}></SaveCards>
-                    <AskDeepSeek setContent={setContent} content={content} prompt={prompt}></AskDeepSeek>
-                    <AskDeepSeekChain setContent={setContent} content={content}></AskDeepSeekChain>
+
+                    <AskDeepSeek setContent={setContent} content={content}></AskDeepSeek>
 
                 </div>
                 <div className="col-xxl-6">
@@ -54,15 +55,13 @@ function SaveCards({content,topicId})
 function AskDeepSeekChain({content, setContent}) {
     const [isLoading, setIsLoading] = useState(false);
 
-    let prompt1="Отформатируй статью. \n" +
+    let prompt1="Отформатируй статью. Если статья не на русском переведи \n" +
         "Статья должна быть разбита на небольшие абзацы около 50 слов в каждом, каждый обзац должен быть озаглавлен. \n" +
         "Все формулы должны быть в формате katex, выделены знаками $$ . \n" +
         "Оставь на месте номера рисунков . \n" +
         "В конце названия должен стоять маркер {name}, в конце абзаца маркер {card}";
 
     let prompt2="Сделай из данного текста задания, то есть выдели маркером {m} \n" +
-
-
         "те слова которые пользователь должен будет вставить \n" +
         "внутри маркеров не более одного слова например\n" +
         " \n" +
@@ -124,7 +123,7 @@ function AskDeepSeekChain({content, setContent}) {
         </button>
     );
 }
-function AskDeepSeek({content,prompt,setContent})
+function AskDeepSeek1({content,prompt,setContent})
 {
 
     async function sendMessage() {
@@ -264,10 +263,14 @@ function createCard(inputCards, topicId)
 
             for (let i=0;i<inputCards.length-1;i++)
             {
+                let content = inputCards[i].content;
+                content = content.split("\\").join("slash");
+                content = content.split("\'").join("apostrof");
+
                 let card = {
                     topic_id: topicId,
                     card_name: inputCards[i].name,
-                    card_mark: inputCards[i].content,
+                    card_mark: content,
                     type: 1,
                     visible: 2,
                     task: ""

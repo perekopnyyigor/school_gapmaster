@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import CardRedactor from "./CardRedactor";
 import TopicRedactor from "./TopicRedactor";
 import {c} from "react/compiler-runtime";
+import TaskTable from "./TaskTable";
 
 function Topic()
 {
@@ -74,6 +75,8 @@ function Select({cardId,topic_id})
             setContent(<CardRedactor card={cardId} />);
         if (form=='addCard')
             setContent(<TopicRedactor topicId={topic_id}/>);
+        if (form=='taskTable')
+            setContent(<TaskTable topicId={topic_id}/>);
     }
 
 
@@ -85,13 +88,13 @@ function Select({cardId,topic_id})
                 <li className="nav-item">
 
                     <button onClick={() => selectContent('redactor')} className="nav-link active" aria-current="page"
-                       >Active</button>
+                       >Редактор</button>
                 </li>
                 <li className="nav-item">
-                    <button onClick={() => selectContent('addCard')} className="nav-link">Link</button>
+                    <button onClick={() => selectContent('addCard')} className="nav-link">Список</button>
                 </li>
                 <li className="nav-item">
-                    <button onClick={() => selectContent('addCardList')} className="nav-link" >Link</button>
+                    <button onClick={() => selectContent('taskTable')} className="nav-link" >Задания</button>
                 </li>
                 <li className="nav-item">
                     <button className="nav-link disabled" aria-disabled="true">Disabled</button>
