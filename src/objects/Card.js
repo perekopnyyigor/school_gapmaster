@@ -4,7 +4,7 @@ class Card
      getCard(cardId) {
         const post_data = { card_id: cardId };
         axios
-            .post("/index_redactor.php?action=get_card", post_data, {
+            .post("https://studycard.ru/index_redactor.php?action=get_card", post_data, {
                 headers: { "Content-Type": "application/json" },
             })
             .then((response) => {

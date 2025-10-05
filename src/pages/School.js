@@ -7,8 +7,11 @@ function School()
 
     const [data, setData] = useState([]);
     const navigate = useNavigate();
+
+
+
     useEffect(() => {
-        axios.get('/index_redactor.php?action=all_chapters')
+        axios.get('https://studycard.ru/index_redactor.php?action=all_chapters')
             .then(response => setData(response.data))
             .catch(error => console.error(error));
     }, []);
@@ -35,11 +38,18 @@ function School()
             </button>
 
             {data.map(item => (
-                <button onClick={()=>toCours(item.id)}  type="button" className="list-group-item list-group-item-action">{item.name}</button>
+                <button onClick={()=>toCours(item.id)}  type="button" className="list-group-item list-group-item-action"><StrongCours cours={item} /></button>
             ))}
 
         </div>);
 
 }
+function StrongCours({cours})
+{
+    if (cours.visible==1)
+        return <strong>{cours.name}</strong>
+    else
+        return cours.name;
 
+}
 export default School

@@ -18,7 +18,7 @@ function TaskTable({topicId})
 
     useEffect(() => {
         const post_data = {topic_id: topic.id};
-        axios.post('/index_redactor.php?action=get_topic', post_data, {headers: {'Content-Type': 'application/json'}})
+        axios.post('https://studycard.ru/index_redactor.php?action=get_topic', post_data, {headers: {'Content-Type': 'application/json'}})
             .then(response => setData(response.data))
             .catch(error => console.error(error));
     }, [topic.id]);
@@ -206,7 +206,7 @@ function Send(id, period) {
     };
 
     axios
-        .post("/index_redactor.php?action=redact_period", post_data, {
+        .post("https://studycard.ru/index_redactor.php?action=redact_period", post_data, {
             headers: { "Content-Type": "application/json" },
         })
         .then((response) => {

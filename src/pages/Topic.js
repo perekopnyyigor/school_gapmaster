@@ -49,7 +49,7 @@ function createCard(topic_id)
     };
 
     axios
-        .post("/index_redactor.php?action=add_card", post_data, {
+        .post("https://studycard.ru/index_redactor.php?action=add_card", post_data, {
             headers: { "Content-Type": "application/json" },
         })
         .then((response) => {
@@ -114,7 +114,7 @@ function CardList({selectCardId,topicId,cardListTrig}) {
 
 
     useEffect(() => {
-        axios.post('/index_redactor.php?action=get_topic', post_data, {headers: {'Content-Type': 'application/json'}})
+        axios.post('https://studycard.ru/index_redactor.php?action=get_topic', post_data, {headers: {'Content-Type': 'application/json'}})
             .then(response => setData(response.data))
             .catch(error => console.error(error));
     }, [post_data]);

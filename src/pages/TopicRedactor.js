@@ -52,111 +52,7 @@ function SaveCards({content,topicId})
 }
 
 
-function AskDeepSeekChain({content, setContent}) {
-    const [isLoading, setIsLoading] = useState(false);
 
-    let prompt1="Отформатируй статью. Если статья не на русском переведи \n" +
-        "Статья должна быть разбита на небольшие абзацы около 50 слов в каждом, каждый обзац должен быть озаглавлен. \n" +
-        "Все формулы должны быть в формате katex, выделены знаками $$ . \n" +
-        "Оставь на месте номера рисунков . \n" +
-        "В конце названия должен стоять маркер {name}, в конце абзаца маркер {card}";
-
-    let prompt2="Сделай из данного текста задания, то есть выдели маркером {m} \n" +
-        "те слова которые пользователь должен будет вставить \n" +
-        "внутри маркеров не более одного слова например\n" +
-        " \n" +
-        "Если точка $$M$$ числовой окружности со­ ответствует числу $$t$$, \n" +
-        "то абсциссу точки $$M$$ называют {m}косинусом{m} числа $$t$$ \n" +
-        "а ординату точки $$M$$ называют {m}синусом{m} числа $$t$$";
-
-    async function askAI(question) {
-        const apiKey = "sk-c1c6d82e3f92484497f0e79700d3db3a";
-
-        const response = await fetch("https://api.deepseek.com/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${apiKey}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                model: "deepseek-chat",
-                messages: [
-                    {"role": "system", "content": "You are a helpful assistant"},
-                    {"role": "user", "content": question}
-                ],
-                stream: false
-            })
-        });
-
-        const data = await response.json();
-        return data.choices[0].message.content;
-    }
-
-    async function runAllSteps() {
-        setIsLoading(true);
-
-        try {
-            // Шаг 1: Первый вопрос
-            const answer1 = await askAI(prompt1 + content);
-
-            const answer2 = await askAI(prompt2 + answer1);
-
-            setContent(answer2);
-
-
-
-        } catch (error) {
-            console.error("Error:", error);
-        } finally {
-            setIsLoading(false);
-        }
-
-    }
-
-    return (
-        <button
-            onClick={runAllSteps}
-            disabled={isLoading}
-            className="btn btn-primary p-2 m-2"
-        >
-            {isLoading ? 'Выполняю последовательность...' : 'Запустить цепочку вопросов'}
-        </button>
-    );
-}
-function AskDeepSeek1({content,prompt,setContent})
-{
-
-    async function sendMessage() {
-        const apiKey = "sk-c1c6d82e3f92484497f0e79700d3db3a";
-        const apiUrl = "https://api.deepseek.com/chat/completions";
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${apiKey}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    model: "deepseek-chat",
-                    messages: [
-                        {"role": "system", "content": "You are a helpful assistant"},
-                        {"role": "user", "content": prompt + content}
-                    ],
-                    stream: false
-                })
-            });
-
-            const data = await response.json();
-            console.log("Response:", data.choices[0].message.content);
-            setContent(data.choices[0].message.content);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-
-    return (<button onClick={() => sendMessage()} type="button" className="btn btn-primary p-2 m-2">Спросить</button>)
-}
 function Text({content, setContent}) {
 
 
@@ -284,7 +180,7 @@ function createCard(inputCards, topicId)
             };
 
             axios
-                .post("/index_redactor.php?action=add_cards", post_data, {
+                .post("https://studycard.ru/index_redactor.php?action=add_cards", post_data, {
                     headers: { "Content-Type": "application/json" },
                 })
 

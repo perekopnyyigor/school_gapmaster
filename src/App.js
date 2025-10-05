@@ -1,13 +1,13 @@
 
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Добавили BrowserRouter
+import {BrowserRouter, Routes, Route, HashRouter} from 'react-router-dom'; // Добавили BrowserRouter
 import Enter from "./pages/Enter";
 import School from "./pages/School";
 import Cours from "./pages/Cours";
 import Topic from "./pages/Topic";
 function App() {
   return (
-      <BrowserRouter>
+      <HashRouter>
         <div>
           <Routes>
             <Route path="/" element={<Enter />} />
@@ -16,7 +16,7 @@ function App() {
               <Route path="/topic" element={<Topic />} />
           </Routes>
         </div>
-      </BrowserRouter>
+      </HashRouter>
 );
 }
 

@@ -98,6 +98,46 @@ function simplePrompts() {
 
     return promts;
 }
+
+function programPrompts() {
+    const promts = [];
+
+    promts[0]="Придумай 20 простых заданий на эту тему \n" +
+        "\n" +
+        "После каждого названия примера ставь маркер: {name}\n" +
+        "После каждого примера ставь маркер : {card}\n" +
+        "\n" +
+        "Пример:\n" +
+        "Преобразование строки в верхний/нижний регистр.{name}\n" +
+        "\n" +
+        "    ```csharp\n" +
+        "    string mixedCase = \"HeLLo WoRLd\";\n" +
+        "    string upper = mixedCase.ToUpper(); // \"HELLO WORLD\"\n" +
+        "    string lower = mixedCase.ToLower(); // \"hello world\"\n" +
+        "    ```\n" +
+        "{card}" ;
+
+
+
+    promts[1]="Сделай из данного текста задания, то есть выдели маркером {m} \n" +
+        "те слова которые пользователь должен будет вставить\n" +
+        "остальные маркеры оставь как есть,  например\n" +
+        "\n" +
+        "\n" +
+        "Пример:\n" +
+        "Преобразование строки в верхний/нижний регистр.{name}\n" +
+        "\n" +
+        "    ```csharp\n" +
+        "    string text = \"Hello, World!\";\n" +
+        "    int {m}length{m} = text.{m}Length{m}; // 13\n" +
+        "    Console.WriteLine({m}length{m});\n" +
+        "   ```\n" +
+        "\n" +
+        "{card}"
+
+
+    return promts;
+}
 async function askAI(question) {
     const apiKey = "sk-c1c6d82e3f92484497f0e79700d3db3a";
 
@@ -142,7 +182,7 @@ async function runAllSteps(content,prompts,setIsLoading) {
     }
 
 }
-async function  solveStep(prompts,content,setContent,setIsLoading)
+async function  solveStep(prompts,content,setContent,setIsLoading)//Обрабатываем части по очереди
 {
     let contents=content.split("{simple}");
 
@@ -164,7 +204,13 @@ async function  solveStep(prompts,content,setContent,setIsLoading)
 function AskDeepSeek({content, setContent}) {
     const [isLoading, setIsLoading] = useState(false);
 
-
+    async function  ask()
+    {
+        const prompts = [];
+        prompts[0] = "";
+        let answer = await   runAllSteps(content,prompts,setIsLoading)
+        setContent(answer);
+    }
 
 
     async function  create()
@@ -185,14 +231,27 @@ function AskDeepSeek({content, setContent}) {
         await solveStep(prompts,content,setContent,setIsLoading)
 
     }
+    async function  program()
+    {
+        let prompts = programPrompts();
+        await solveStep(prompts,content,setContent,setIsLoading)
+
+    }
     return (
         <div>
+            <button
+                onClick={ask}
+                disabled={isLoading}
+                className="btn btn-primary p-2 m-2"
+            >
+                {isLoading ? 'Выполняю...' : 'Спросить'}
+            </button>
             <button
                 onClick={create}
                 disabled={isLoading}
                 className="btn btn-primary p-2 m-2"
             >
-                {isLoading ? 'Выполняю...' : 'Запустить'}
+                {isLoading ? 'Выполняю...' : 'Текст'}
             </button>
 
             <button
@@ -208,6 +267,13 @@ function AskDeepSeek({content, setContent}) {
                 className="btn btn-primary p-2 m-2"
             >
                 {isLoading ? 'Выполняю...' : 'Примеры'}
+            </button>
+            <button
+                onClick={program}
+                disabled={isLoading}
+                className="btn btn-primary p-2 m-2"
+            >
+                {isLoading ? 'Выполняю...' : 'Прог'}
             </button>
 
         </div>

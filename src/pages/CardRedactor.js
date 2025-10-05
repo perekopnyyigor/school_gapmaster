@@ -19,7 +19,7 @@ function CardRedactor({cardId})
         const post_data = { card_id: cardId };
 
         axios
-            .post("/index_redactor.php?action=get_card", post_data, {
+            .post("https://studycard.ru/index_redactor.php?action=get_card", post_data, {
                 headers: { "Content-Type": "application/json" },
             })
             .then((response) => {
@@ -114,7 +114,7 @@ function deleteCard(id)
     let del = window.confirm("Вы действительно хотите удалить карту");
     if (del) {
         axios
-            .post("/index_redactor.php?action=delete_card", post_data, {
+            .post("https://studycard.ru/index_redactor.php?action=delete_card", post_data, {
                 headers: {"Content-Type": "application/json"},
             })
             .then((response) => {
@@ -192,7 +192,7 @@ function Send(card,content,name)
         practic:0 };
 
     axios
-        .post("/index_redactor.php?action=redact_card", post_data, {
+        .post("https://studycard.ru/index_redactor.php?action=redact_card", post_data, {
             headers: { "Content-Type": "application/json" },
         })
         .then((response) => {
