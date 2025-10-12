@@ -7,9 +7,9 @@ import cards from "./Topic";
 import axios from "axios";
 import {useLocation} from "react-router-dom";
 import {c} from "react/compiler-runtime";
-import Markdown from "../components/Markdown";
-import TextArea from "../components/TextArea";
-import AskDeepSeek from "../components/AskDeepSeek";
+import Markdown from "../../components/Markdown";
+import TextArea from "../../components/TextArea";
+import AskDeepSeek from "../../components/AskDeepSeek";
 function TopicRedactor()
 {
     const location = useLocation();

@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import {data, useLocation} from "react-router-dom";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import CardRedactor from "./CardRedactor";
+import Navbar from "../../components/Navbar";
+import CardRedactor from "../card/CardRedactor";
 import TopicRedactor from "./TopicRedactor";
 import {c} from "react/compiler-runtime";
 import TaskTable from "./TaskTable";
+import CreateCard from "./CreateCard";
 
 function Topic()
 {
@@ -15,19 +16,14 @@ function Topic()
     const location = useLocation();
     const {topic} = location.state || {};
 
-    function create(topicId)
-    {
 
-        createCard(topicId);
-
-    }
     return (<div>
 
         <div className="row ">
 
             <div className="col-2">
                 <CardList topicId={topic.id}  selectCardId={selectCardId}></CardList>
-                <button onClick={()=>create(topic.id)} type="button" className="btn btn-primary p-2 m-2">Добавить</button>
+                <CreateCard topic_id={topic.id} type="button" className="btn btn-primary p-2 m-2">Добавить</CreateCard>
             </div>
             <div className="col-10">
                 <Select cardId={cardId} topicId={topic.id} ></Select>
@@ -36,32 +32,11 @@ function Topic()
         </div>
     );
 }
-function createCard(topic_id)
-{
 
-    const post_data = {
-        topic_id:topic_id,
-        card_name:"new card",
-        card_mark:"content",
-        type:1,
-        visible:2,
-        task:""
-    };
 
-    axios
-        .post("https://studycard.ru/index_redactor.php?action=add_card", post_data, {
-            headers: { "Content-Type": "application/json" },
-        })
-        .then((response) => {
+function Select({cardId, topic_id}) {
 
-        })
-        .catch((error) => console.error(error));
-
-}
-function Select({cardId,topic_id})
-{
-
-    const [content, setContent]=useState(null);
+    const [content, setContent] = useState(null);
 
     useEffect(() => {
         if (cardId) {

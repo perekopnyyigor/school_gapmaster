@@ -5,10 +5,10 @@ import axios from "axios";
 import "katex/dist/katex.min.css";
 
 import 'highlight.js/styles/github.css';
-import Markdown from "../components/Markdown";
-import TextArea from "../components/TextArea";
+import Markdown from "../../components/Markdown";
+import TextArea from "../../components/TextArea";
 import Instrument from "./Instrument";
-import Card from "../objects/Card"; // Импорт стиля
+import Card from "../../objects/Card"; // Импорт стиля
 function CardRedactor({cardId})
 {
 
